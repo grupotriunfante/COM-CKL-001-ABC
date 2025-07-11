@@ -104,7 +104,7 @@
   <img src="https://i.imgur.com/WzaQvTL.png" alt="Logo" style="width: 45px; height: auto;">
   <h1 style="font-size: 32px; margin: 0;">Checklist de Rotina - Assistente de Vendas</h1>
 </div>
-<h5>COM-CKL-001-ABC Rev:02</h5>
+<h5>COM-CKL-001-ABC Rev:01</h5>
 <!-- Formulário de informações iniciais -->
 <div class="form-container" style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
   <div style="flex: 2;">
@@ -153,14 +153,14 @@
     <tbody>
       <script>
         const atividades = [
-          ["Diario","Dar suporte aos RCA","-","Whatsapp","Acionar Gerente Comercial"],
-          ["Semanal","Realizar o acompanhamento semanal de indústrias(3M, SINTER, Lindt, Dikoko, Mars Food)","-","E-mail","Acionar Gerente Comercial"],
-          ["Semanal","Fazer acompanhamento semanal de indústrias(Classic Chef)","-","E-mail","Acionar Gerente Comercial"],
-          ["Semanal","Realizar Acompanhamento mensal 3M","-","E-mail","Acionar Gerente Comercial"],
-          ["Semanal","Realizar Acompanhamento mensal Rayovac","-","E-mail","Acionar Gerente Comercial"],
-          ["Conforme Demanda","Fazer Cadastro de Feriado","-","Clube da Venda","Acionar Gerente Comercial"],
-          ["Conforme Demanda","Entrar em contato com clientes","-","Telefone/Whatsapp","Acionar Gerente Comercial"],
-          ["Conforme Demanda","Criar combos","-","-","Acionar Gerente Comercial"],
+          ["Após recebimento das especifações da Indústria","Realizar o FTP","-","SICF","Acionar Gerente Comercial"],
+          ["A cada ciclo semanal de vendas","Realizar o acompanhamento semanal de indústrias(3M, SINTER, Lindt, Dikoko, Mars Food)","-","SICF","Acionar Gerente Comercial"],
+          ["A cada ciclo semanal de vendas","Fazer acompanhamento semanal de indústrias(Classic Chef)","-","SICF","Acionar Gerente Comercial"],
+          ["Após receber demanda para criação","Realizar Combos","-","Portal","Acionar Gerente Comercial"],
+          ["Após receber solicitação por parte dos RCA","Dar suporte aos RCA","-","SICF/PORTAL","Acionar Gerente Comercial"],
+          ["Após receber solicitação do Supervisor","Fazer Cadastro de Feriado","-","SICF/PORTAL","Acionar Gerente Comercial"],
+          ["A cada ciclo semanal de vendas","Realizar Acompanhamento mensal 3M","-","SICF","Acionar Gerente Comercial"],
+          ["A cada ciclo semanal de vendas","Realizar Acompanhamento mensal Rayovac","-","SICF","Acionar Gerente Comercial"],
           ];
 
         for (let i = 0; i < atividades.length; i++) {
@@ -250,7 +250,7 @@
     formData.append("data", data);
     formData.append("unidade", unidade);
 
-    fetch("https://script.google.com/macros/s/AKfycbwo4UOFm3DqGR1-sX9qPKpnu3sjLTVDJwGwiyA8hwBDPboXpGGYMXgrzlzuMJ1vok4g6w/exec", {
+    fetch("https://script.google.com/macros/s/AKfycbx_dNN42cafAvL9K3MN2NdTW4xHS3Qyu8LBg61iXaixhEKvtgBrGjacBR8OqllDMJw1tA/exec", {
       method: "POST",
       body: formData
     })
@@ -293,19 +293,31 @@
 <script>
   window.onload = function () {
     const dataInput = document.getElementById("data");
-    const hoje = new Date().toISOString().split("T")[0];
-    dataInput.value = hoje;
-    dataInput.min = hoje;
-    dataInput.max = hoje;
-    dataInput.readOnly = true; // impede que o usuário digite manualmente
+    // Obtém a data e hora local do dispositivo (Campinas, SP, Brasil)
+    const agora = new Date(); 
+    const ano = agora.getFullYear();
+    // Mês é de 0 a 11, por isso somamos 1 e usamos padStart para ter sempre dois dígitos
+    const mes = String(agora.getMonth() + 1).padStart(2, '0'); 
+    // Dia do mês, com padStart para ter sempre dois dígitos
+    const dia = String(agora.getDate()).padStart(2, '0');
+
+    // Formata a data como 'YYYY-MM-DD'
+    const hojeFormatado = `${ano}-${mes}-${dia}`;
+    
+    // Define o valor do campo data para o dia atual
+    dataInput.value = hojeFormatado; 
+    // Restringe a data mínima ao dia atual, impedindo seleção de datas passadas
+    dataInput.min = hojeFormatado;   
+    // Restringe a data máxima ao dia atual, impedindo seleção de datas futuras
+    dataInput.max = hojeFormatado;   
+    // Impede que o usuário digite manualmente no campo
+    dataInput.readOnly = true;       
+    // Impede o clique para abrir o calendário de seleção de data
+    dataInput.style.pointerEvents = 'none'; 
+    // Opcional: Adiciona um estilo visual para indicar que o campo está desabilitado
+    dataInput.style.backgroundColor = '#e9ecef'; 
   };
 </script>
 
-
-
 </body>
-
-
-
-
 </html>
